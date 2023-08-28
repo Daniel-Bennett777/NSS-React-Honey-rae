@@ -1,25 +1,59 @@
-import logo from './logo.svg';
-import './App.css';
+import {useEffect, useState } from "react"
+import { getAllTickets } from "./services/ticketService.js"
+import "./app.css"
+export const App = () => {
+  const [allTickets, setAllTickets] = useState([])
+  const [showEmergencyOnly, setShowEmergencyOnly] = useState(false);
+  const [filteredTickets, setFilteredTickets] = useState([]);
+  useEffect(() => {
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    getAllTickets().then((ticketsArray) => {
+      setAllTickets(ticketsArray)
+      console.log("tickets set!")
+  
+    })
+    
+  }, []) //only runs on initial render of component
+
+  useEffect (() => {
+    if (showEmergencyOnly) {
+      const emergencyTickets = allTickets.filter(
+        (ticket) => ticket.emergency === true
+      )
+      
+      setFilteredTickets(emergencyTickets)
+    } else {
+      setFilteredTickets(allTickets)
+    }
+    
+  }, [showEmergencyOnly, allTickets])
+
+  return <div className = "tickets-container">
+    <h2>Tickets</h2>
+    <div>
+      <button className="filter-btn btn-primary" onClick={() => {setShowEmergencyOnly(true)}}>emergency</button>
+      <button
+      className="fiter-btn btn-info"
+      onClick={() => {setShowEmergencyOnly(false)}}
+      >Show All
+      </button>
     </div>
-  );
+    <article className="tickets">
+      {filteredTickets.map(ticket => {
+        return (
+          <section className="ticket" key={ticket.id}>
+            <header className ="ticket-info">#{ticket.id}</header>
+            <div>{ticket.description}</div>
+            <footer>
+              <div>
+                <div className="ticket-info">emergency</div>
+                <div>{ticket.emergency ? "yes" : "no"}</div>
+              </div>
+            </footer>
+          </section>
+        )
+      })}
+    </article>
+  </div>
 }
 
-export default App;
