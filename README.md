@@ -1,3 +1,4 @@
+### welcome to HONEY_RAES the first big REact project for daniel bennett in NSS! feel free to checkout my code and see the kind of work we did with file structure in order to achiece some great implementations of react features like hooks and routing. 
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
